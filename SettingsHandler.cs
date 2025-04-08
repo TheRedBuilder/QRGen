@@ -14,6 +14,7 @@ namespace QRGen
 	public class JsonSettings<T> where T : new()
 	{
 		readonly string _filePath;
+		public string FilePath => _filePath;
 		T _data;
 
 		public JsonSettings(string filePath)
@@ -26,21 +27,37 @@ namespace QRGen
 
 		public void Save()
 		{
-			var json = JsonConvert.SerializeObject(_data, Formatting.Indented);
-			Directory.CreateDirectory(_filePath);
-			File.WriteAllText(_filePath, json);
+			try
+			{
+				var json = JsonConvert.SerializeObject(_data, Formatting.Indented);
+				Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
+				File.WriteAllText(_filePath, json);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show("Error during settings saving! Exception:\n" + e.Message, "Settings Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Application.Exit();
+			}
 		}
 
 		public void Load()
 		{
-			if (File.Exists(_filePath))
+			try
 			{
-				var json = File.ReadAllText(_filePath);
-				_data = JsonConvert.DeserializeObject<T>(json) ?? new T();
+				if (File.Exists(_filePath))
+				{
+					var json = File.ReadAllText(_filePath);
+					_data = JsonConvert.DeserializeObject<T>(json) ?? new T();
+				}
+				else
+				{
+					_data = new T();
+				}
 			}
-			else
+			catch (Exception e)
 			{
-				_data = new T();
+				MessageBox.Show("Error during settings loading! Exception:\n" + e.Message, "Settings Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Application.Exit();
 			}
 		}
 

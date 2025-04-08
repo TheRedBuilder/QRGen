@@ -34,15 +34,21 @@
 			panel1 = new Panel();
 			label1 = new Label();
 			tabPageRead = new TabPage();
+			panel2 = new Panel();
+			label2 = new Label();
 			statusStrip1 = new StatusStrip();
 			menuStrip1 = new MenuStrip();
 			fileToolStripMenuItem = new ToolStripMenuItem();
+			exitToolStripMenuItem = new ToolStripMenuItem();
+			settingsToolStripMenuItem = new ToolStripMenuItem();
 			darkModeToolStripMenuItem = new ToolStripMenuItem();
 			toolStripSeparator1 = new ToolStripSeparator();
-			exitToolStripMenuItem = new ToolStripMenuItem();
+			inspectSettingsFileToolStripMenuItem = new ToolStripMenuItem();
 			mainTabControl.SuspendLayout();
 			tabPageCreate.SuspendLayout();
 			panel1.SuspendLayout();
+			tabPageRead.SuspendLayout();
+			panel2.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -61,6 +67,7 @@
 			// 
 			// tabPageCreate
 			// 
+			tabPageCreate.BackColor = SystemColors.ControlLightLight;
 			tabPageCreate.Controls.Add(panel1);
 			tabPageCreate.Location = new Point(4, 29);
 			tabPageCreate.Name = "tabPageCreate";
@@ -68,11 +75,11 @@
 			tabPageCreate.Size = new Size(492, 365);
 			tabPageCreate.TabIndex = 0;
 			tabPageCreate.Text = "Create";
-			tabPageCreate.UseVisualStyleBackColor = true;
 			// 
 			// panel1
 			// 
 			panel1.AutoScroll = true;
+			panel1.BackColor = SystemColors.ControlLightLight;
 			panel1.Controls.Add(label1);
 			panel1.Dock = DockStyle.Fill;
 			panel1.Location = new Point(3, 3);
@@ -83,6 +90,7 @@
 			// label1
 			// 
 			label1.Dock = DockStyle.Top;
+			label1.Font = new Font("Segoe UI", 12F);
 			label1.Location = new Point(0, 0);
 			label1.Name = "label1";
 			label1.Size = new Size(486, 30);
@@ -92,16 +100,40 @@
 			// 
 			// tabPageRead
 			// 
+			tabPageRead.BackColor = SystemColors.ControlLightLight;
+			tabPageRead.Controls.Add(panel2);
 			tabPageRead.Location = new Point(4, 29);
 			tabPageRead.Name = "tabPageRead";
 			tabPageRead.Padding = new Padding(3);
 			tabPageRead.Size = new Size(492, 365);
 			tabPageRead.TabIndex = 1;
 			tabPageRead.Text = "Read";
-			tabPageRead.UseVisualStyleBackColor = true;
+			// 
+			// panel2
+			// 
+			panel2.AutoScroll = true;
+			panel2.BackColor = SystemColors.ControlLightLight;
+			panel2.Controls.Add(label2);
+			panel2.Dock = DockStyle.Fill;
+			panel2.Location = new Point(3, 3);
+			panel2.Name = "panel2";
+			panel2.Size = new Size(486, 359);
+			panel2.TabIndex = 2;
+			// 
+			// label2
+			// 
+			label2.Dock = DockStyle.Top;
+			label2.Font = new Font("Segoe UI", 12F);
+			label2.Location = new Point(0, 0);
+			label2.Name = "label2";
+			label2.Size = new Size(486, 30);
+			label2.TabIndex = 0;
+			label2.Text = "Read a QR Code";
+			label2.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// statusStrip1
 			// 
+			statusStrip1.BackColor = SystemColors.ControlLight;
 			statusStrip1.GripStyle = ToolStripGripStyle.Visible;
 			statusStrip1.Location = new Point(0, 428);
 			statusStrip1.Name = "statusStrip1";
@@ -112,7 +144,7 @@
 			// 
 			// menuStrip1
 			// 
-			menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+			menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, settingsToolStripMenuItem });
 			menuStrip1.Location = new Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.RenderMode = ToolStripRenderMode.System;
@@ -122,32 +154,45 @@
 			// 
 			// fileToolStripMenuItem
 			// 
-			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { darkModeToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
+			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem });
 			fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			fileToolStripMenuItem.Size = new Size(37, 20);
 			fileToolStripMenuItem.Text = "File";
 			fileToolStripMenuItem.TextImageRelation = TextImageRelation.Overlay;
 			// 
+			// exitToolStripMenuItem
+			// 
+			exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+			exitToolStripMenuItem.ShortcutKeyDisplayString = "Alt+F4";
+			exitToolStripMenuItem.Size = new Size(135, 22);
+			exitToolStripMenuItem.Text = "Exit";
+			exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+			// 
+			// settingsToolStripMenuItem
+			// 
+			settingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { darkModeToolStripMenuItem, toolStripSeparator1, inspectSettingsFileToolStripMenuItem });
+			settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+			settingsToolStripMenuItem.Size = new Size(61, 20);
+			settingsToolStripMenuItem.Text = "Settings";
+			// 
 			// darkModeToolStripMenuItem
 			// 
-			darkModeToolStripMenuItem.CheckOnClick = true;
 			darkModeToolStripMenuItem.Name = "darkModeToolStripMenuItem";
-			darkModeToolStripMenuItem.Size = new Size(180, 22);
+			darkModeToolStripMenuItem.Size = new Size(178, 22);
 			darkModeToolStripMenuItem.Text = "Dark Mode";
 			darkModeToolStripMenuItem.Click += darkModeToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new Size(177, 6);
+			toolStripSeparator1.Size = new Size(175, 6);
 			// 
-			// exitToolStripMenuItem
+			// inspectSettingsFileToolStripMenuItem
 			// 
-			exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			exitToolStripMenuItem.ShortcutKeyDisplayString = "Alt+F4";
-			exitToolStripMenuItem.Size = new Size(180, 22);
-			exitToolStripMenuItem.Text = "Exit";
-			exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+			inspectSettingsFileToolStripMenuItem.Name = "inspectSettingsFileToolStripMenuItem";
+			inspectSettingsFileToolStripMenuItem.Size = new Size(178, 22);
+			inspectSettingsFileToolStripMenuItem.Text = "Inspect Settings File";
+			inspectSettingsFileToolStripMenuItem.Click += inspectSettingsFileToolStripMenuItem_Click;
 			// 
 			// FormMain
 			// 
@@ -166,6 +211,8 @@
 			mainTabControl.ResumeLayout(false);
 			tabPageCreate.ResumeLayout(false);
 			panel1.ResumeLayout(false);
+			tabPageRead.ResumeLayout(false);
+			panel2.ResumeLayout(false);
 			menuStrip1.ResumeLayout(false);
 			menuStrip1.PerformLayout();
 			ResumeLayout(false);
@@ -183,7 +230,11 @@
 		private MenuStrip menuStrip1;
 		private ToolStripMenuItem fileToolStripMenuItem;
 		private ToolStripMenuItem exitToolStripMenuItem;
+		private ToolStripMenuItem settingsToolStripMenuItem;
 		private ToolStripMenuItem darkModeToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator1;
+		private ToolStripMenuItem inspectSettingsFileToolStripMenuItem;
+		private Panel panel2;
+		private Label label2;
 	}
 }
