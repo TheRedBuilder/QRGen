@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace QRGen
 {
+	/// <summary>
+	/// Current application settings.
+	/// </summary>
 	public class AppSettings
 	{
 		public int Theme { get; set; } = 0;

@@ -5,6 +5,9 @@ using static QRGen.Program;
 
 namespace QRGen
 {
+	/// <summary>
+	/// Main Form of the program.
+	/// </summary>
 	public partial class FormMain : Form
 	{
 		public FormMain()

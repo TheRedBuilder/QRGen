@@ -4,7 +4,7 @@ namespace QRGen
     {
 
 		/// <summary>
-		/// The app settings instance.
+		/// The global app settings instance.
 		/// </summary>
 		public static JsonSettings<AppSettings> appSettings = new(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "The Red Builder/QRGen/config.json"));
 
@@ -14,10 +14,8 @@ namespace QRGen
 		[STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-			Application.SetColorMode((SystemColorMode)appSettings.Data.Theme);
+			Application.SetColorMode((SystemColorMode)appSettings.Data.Theme); //Set the correct theme. (the error is silenced as this is technically a preview feature)
             Application.Run(new FormMain());
         }
     }

@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace QRGen
 {
+	/// <summary>
+	/// Output Form which is created when the user generates a QR Code and lets the user save it as an image.
+	/// </summary>
 	public partial class FormOutput : Form
 	{
 		public FormOutput()
@@ -18,6 +21,9 @@ namespace QRGen
 			InitializeComponent();
 		}
 
+		/// <summary>
+		/// Asks the user to save the Image shown in the outputPictureBox.
+		/// </summary>
 		private void SaveImage()
 		{
 			if (outputPictureBox.Image != null)
@@ -71,14 +77,47 @@ namespace QRGen
 			SaveImage();
 		}
 
-		private void toolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			SaveImage();
-		}
-
 		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			this.Close();
+		}
+
+		/// <summary>
+		/// Mimic Zoom SizeMode, but use nearest neighbor filtering to remain sharp. (this is a QR Code afterall)
+		/// </summary>
+		private void outputPictureBox_Paint(object sender, PaintEventArgs e)
+		{
+			if (outputPictureBox.Image == null)
+				return;
+
+			var image = outputPictureBox.Image;
+			var container = outputPictureBox.ClientRectangle;
+
+			float imageAspect = (float)image.Width / image.Height;
+			float boxAspect = (float)container.Width / container.Height;
+
+			int drawWidth, drawHeight;
+			if (imageAspect > boxAspect)
+			{
+				drawWidth = container.Width;
+				drawHeight = (int)(container.Width / imageAspect);
+			}
+			else
+			{
+				drawHeight = container.Height;
+				drawWidth = (int)(container.Height * imageAspect);
+			}
+
+			int offsetX = (container.Width - drawWidth) / 2;
+			int offsetY = (container.Height - drawHeight) / 2;
+
+			var destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
+
+			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+			e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+
+			e.Graphics.Clear(outputPictureBox.BackColor); //fill background to remove previously rendered images
+			e.Graphics.DrawImage(image, destRect);
 		}
 	}
 }

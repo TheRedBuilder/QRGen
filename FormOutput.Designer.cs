@@ -72,7 +72,7 @@
 			toolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
 			toolStripMenuItem1.Size = new Size(186, 22);
 			toolStripMenuItem1.Text = "Save As";
-			toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+			toolStripMenuItem1.Click += saveToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator1
 			// 
@@ -93,10 +93,11 @@
 			outputPictureBox.Dock = DockStyle.Fill;
 			outputPictureBox.Location = new Point(0, 24);
 			outputPictureBox.Name = "outputPictureBox";
-			outputPictureBox.Size = new Size(434, 437);
+			outputPictureBox.Size = new Size(434, 434);
 			outputPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
 			outputPictureBox.TabIndex = 4;
 			outputPictureBox.TabStop = false;
+			outputPictureBox.Paint += outputPictureBox_Paint;
 			// 
 			// saveFileDialog1
 			// 
@@ -108,9 +109,10 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(434, 461);
+			ClientSize = new Size(434, 458);
 			Controls.Add(outputPictureBox);
 			Controls.Add(menuStrip1);
+			MinimumSize = new Size(150, 197);
 			Name = "FormOutput";
 			ShowIcon = false;
 			Text = "Output";

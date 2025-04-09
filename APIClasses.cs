@@ -12,6 +12,10 @@ namespace QRGen
 		Q,
 		H
 	}
+
+	/// <summary>
+	/// Class used to construct the request to the QR Code Generation API.
+	/// </summary>
 	public class APIRequest
 	{
 		public string data = "";
@@ -20,9 +24,13 @@ namespace QRGen
 		public Color foregroundColor = Color.Black;
 		public Color backgroundColor = Color.White;
 
+		/// <summary>
+		/// Formats this request as a valid API URL request.
+		/// </summary>
+		/// <returns>APIRequest URL.</returns>
 		public override string ToString()
 		{
-			var sb = new StringBuilder("https://api.qrserver.com/v1/create-qr-code/?");
+			var sb = new StringBuilder("https://api.qrserver.com/v1/create-qr-code/?"); //StringBuilder makes the code look a bit cleaner
 
 			if (!string.IsNullOrEmpty(data))
 				sb.Append("data=" + Uri.EscapeDataString(data));

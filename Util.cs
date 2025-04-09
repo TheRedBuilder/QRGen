@@ -4,16 +4,30 @@ using System.Reflection;
 
 namespace QRGen
 {
+	/// <summary>
+	/// The static Util class which possesses several utilities used throughout the program.
+	/// </summary>
 	public static class Util
 	{
+		/// <summary>
+		/// Converts a .NET Color class to a Hex string.
+		/// </summary>
+		/// <param name="c">Color to be converted.</param>
+		/// <returns>Color Hex string.</returns>
 		public static string ColorToHex(Color c)
 		{
 			return $"{c.R:X2}{c.G:X2}{c.B:X2}";
 		}
-
+		/// <summary>
+		/// Creates a darkmode-compatible Cyotek Color Picker.
+		/// </summary>
+		/// <param name="doAlpha">Whether to include the Alpha slider or not.</param>
+		/// <returns>The created ColorPickerDialog.</returns>
 		public static ColorPickerDialog NewFixedColorPickerDialog(bool doAlpha = false)
 		{
 			ColorPickerDialog colorPicker = new ColorPickerDialog();
+
+			//Access Ok button via reflection and set its FlatStyle to System (which supports dark-mode)
 			var okButtonField = typeof(ColorPickerDialog).GetField("okButton", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (okButtonField != null)
 			{
@@ -23,7 +37,7 @@ namespace QRGen
 				okButton.ForeColor = SystemColors.ControlLightLight;
 			}
 
-			// Access Cancel button via reflection
+			//Access Cancel button via reflection and set its FlatStyle to System (which supports dark-mode)
 			var cancelButtonField = typeof(ColorPickerDialog).GetField("cancelButton", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (cancelButtonField != null)
 			{
@@ -33,25 +47,35 @@ namespace QRGen
 				cancelButton.ForeColor = SystemColors.ControlLightLight;
 			}
 
-			var colorEditoAlpharField = typeof(ColorPickerDialog).GetField("_showAlphaChannel", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (colorEditoAlpharField != null)
+			//Remove alpha channel slider if requested
+			var colorEditorAlphaField = typeof(ColorPickerDialog).GetField("_showAlphaChannel", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (colorEditorAlphaField != null)
 			{
-				colorEditoAlpharField.SetValue(colorPicker, doAlpha);
+				colorEditorAlphaField.SetValue(colorPicker, doAlpha);
 			}
 
 			return colorPicker;
 		}
 	}
 
+	/// <summary>
+	/// Static util class specifically made for handling API calls.
+	/// </summary>
 	public static class ApiUtil
 	{
+		/// <summary>
+		/// Gets a Response Content string from a URL and an endpoint.
+		/// </summary>
+		/// <param name="baseUrl">The Base URL of the website.</param>
+		/// <param name="subUrl">The Endpoint Sub URL.</param>
+		/// <returns>Response Content string.</returns>
 		public static async Task<string?> GetApiData(string baseUrl, string subUrl)
 		{
 			try
 			{
-				RestClient restClient = new(baseUrl);
+				RestClient restClient = new(baseUrl); //Create the RestClient from the baseUrl
 				RestRequest rq = new(subUrl, Method.Get);
-				var rsp = await restClient.ExecuteAsync(rq);
+				var rsp = await restClient.ExecuteAsync(rq); //Asyncronously performas the request
 				if (rsp.IsSuccessful && rsp.Content != null)
 				{
 					return rsp.Content;
@@ -68,17 +92,21 @@ namespace QRGen
 			}
 			return null;
 		}
-
+		/// <summary>
+		/// Loads and returns an image from a website URL.
+		/// </summary>
+		/// <param name="url">The URL to load the image from</param>
+		/// <returns>The loaded Image, or null if not found.</returns>
 		public static async Task<Image?> LoadImageFromUrlAsync(string url)
 		{
 			try
 			{
 				RestClient restClient = new RestClient(url);
-				byte[] imageData = await restClient.DownloadDataAsync(new("", Method.Get));
+				byte[] imageData = await restClient.DownloadDataAsync(new("", Method.Get)); //Get the image stream
 				Stream fileStream = new MemoryStream(imageData);
 
 				restClient.Dispose();
-				return Image.FromStream(fileStream);
+				return Image.FromStream(fileStream); //Convert the Stream to an Image
 			}
 			catch (Exception ex)
 			{
