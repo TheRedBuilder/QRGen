@@ -17,7 +17,7 @@ namespace QRGen
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-			Application.SetColorMode(appSettings.Data.DarkMode ? SystemColorMode.Dark : SystemColorMode.Classic);
+			Application.SetColorMode((SystemColorMode)appSettings.Data.Theme);
             Application.Run(new FormMain());
         }
     }

@@ -8,6 +8,7 @@ namespace QRGen
 {
 	public class AppSettings
 	{
-		public bool DarkMode { get; set; } = true;
+		public int Theme { get; set; } = 0;
+		public bool SaveInput { get; set; } = true;
 	}
 }
