@@ -36,6 +36,8 @@
 			exitToolStripMenuItem = new ToolStripMenuItem();
 			outputPictureBox = new PictureBox();
 			saveFileDialog1 = new SaveFileDialog();
+			copyToolStripMenuItem = new ToolStripMenuItem();
+			toolStripSeparator2 = new ToolStripSeparator();
 			menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)outputPictureBox).BeginInit();
 			SuspendLayout();
@@ -52,7 +54,7 @@
 			// 
 			// fileToolStripMenuItem
 			// 
-			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, toolStripMenuItem1, toolStripSeparator1, exitToolStripMenuItem });
+			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, toolStripMenuItem1, toolStripSeparator2, copyToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
 			fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			fileToolStripMenuItem.Size = new Size(37, 20);
 			fileToolStripMenuItem.Text = "File";
@@ -105,6 +107,19 @@
 			saveFileDialog1.Filter = "PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tiff;*.tif)|*.tiff;*.tif";
 			saveFileDialog1.Title = "Save QR Code";
 			// 
+			// copyToolStripMenuItem
+			// 
+			copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+			copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
+			copyToolStripMenuItem.Size = new Size(186, 22);
+			copyToolStripMenuItem.Text = "Copy";
+			copyToolStripMenuItem.Click += copyToolStripMenuItem_Click;
+			// 
+			// toolStripSeparator2
+			// 
+			toolStripSeparator2.Name = "toolStripSeparator2";
+			toolStripSeparator2.Size = new Size(183, 6);
+			// 
 			// FormOutput
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -112,6 +127,7 @@
 			ClientSize = new Size(434, 458);
 			Controls.Add(outputPictureBox);
 			Controls.Add(menuStrip1);
+			KeyPreview = true;
 			MinimumSize = new Size(150, 197);
 			Name = "FormOutput";
 			ShowIcon = false;
@@ -133,5 +149,7 @@
 		private ToolStripMenuItem exitToolStripMenuItem;
 		public PictureBox outputPictureBox;
 		private SaveFileDialog saveFileDialog1;
+		private ToolStripSeparator toolStripSeparator2;
+		private ToolStripMenuItem copyToolStripMenuItem;
 	}
 }

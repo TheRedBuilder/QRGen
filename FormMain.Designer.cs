@@ -53,6 +53,7 @@
 			label7 = new Label();
 			decodeButton = new Button();
 			groupBox3 = new GroupBox();
+			label8 = new Label();
 			decodeSelectButton = new Button();
 			selectedFileLabel = new Label();
 			previewPictureBox = new PictureBox();
@@ -136,7 +137,7 @@
 			createButton.Dock = DockStyle.Top;
 			createButton.Enabled = false;
 			createButton.FlatStyle = FlatStyle.System;
-			createButton.Location = new Point(0, 276);
+			createButton.Location = new Point(0, 296);
 			createButton.Name = "createButton";
 			createButton.Size = new Size(486, 23);
 			createButton.TabIndex = 8;
@@ -147,7 +148,7 @@
 			// label6
 			// 
 			label6.Dock = DockStyle.Top;
-			label6.Location = new Point(0, 253);
+			label6.Location = new Point(0, 273);
 			label6.Name = "label6";
 			label6.Size = new Size(486, 23);
 			label6.TabIndex = 7;
@@ -160,7 +161,7 @@
 			eccComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			eccComboBox.FlatStyle = FlatStyle.System;
 			eccComboBox.Items.AddRange(new object[] { "L (low, ~7%)", "M (medium, ~15%)", "Q (quartile, ~25%)", "H (high, ~30%)" });
-			eccComboBox.Location = new Point(0, 230);
+			eccComboBox.Location = new Point(0, 250);
 			eccComboBox.MaximumSize = new Size(200, 0);
 			eccComboBox.Name = "eccComboBox";
 			eccComboBox.Size = new Size(200, 23);
@@ -170,7 +171,7 @@
 			// label4
 			// 
 			label4.Dock = DockStyle.Top;
-			label4.Location = new Point(0, 207);
+			label4.Location = new Point(0, 227);
 			label4.Name = "label4";
 			label4.Size = new Size(486, 23);
 			label4.TabIndex = 3;
@@ -183,7 +184,7 @@
 			flowLayoutPanel1.Controls.Add(groupBox1);
 			flowLayoutPanel1.Controls.Add(groupBox2);
 			flowLayoutPanel1.Dock = DockStyle.Top;
-			flowLayoutPanel1.Location = new Point(0, 136);
+			flowLayoutPanel1.Location = new Point(0, 156);
 			flowLayoutPanel1.Name = "flowLayoutPanel1";
 			flowLayoutPanel1.Size = new Size(486, 71);
 			flowLayoutPanel1.TabIndex = 6;
@@ -253,7 +254,7 @@
 			// label5
 			// 
 			label5.Dock = DockStyle.Top;
-			label5.Location = new Point(0, 113);
+			label5.Location = new Point(0, 133);
 			label5.Name = "label5";
 			label5.Size = new Size(486, 23);
 			label5.TabIndex = 5;
@@ -267,9 +268,9 @@
 			encodeTextBox.Location = new Point(0, 53);
 			encodeTextBox.Multiline = true;
 			encodeTextBox.Name = "encodeTextBox";
-			encodeTextBox.PlaceholderText = "Enter the text to encode into a QR code here.";
+			encodeTextBox.PlaceholderText = "Enter the text to encode into a QR code here, alternatively drag && drop a file.";
 			encodeTextBox.ScrollBars = ScrollBars.Vertical;
-			encodeTextBox.Size = new Size(486, 60);
+			encodeTextBox.Size = new Size(486, 80);
 			encodeTextBox.TabIndex = 2;
 			encodeTextBox.TextChanged += encodeTextBox_TextChanged;
 			// 
@@ -359,6 +360,7 @@
 			// 
 			// groupBox3
 			// 
+			groupBox3.Controls.Add(label8);
 			groupBox3.Controls.Add(decodeSelectButton);
 			groupBox3.Controls.Add(selectedFileLabel);
 			groupBox3.Controls.Add(previewPictureBox);
@@ -370,10 +372,20 @@
 			groupBox3.TabStop = false;
 			groupBox3.Text = "File";
 			// 
+			// label8
+			// 
+			label8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			label8.AutoEllipsis = true;
+			label8.Location = new Point(238, 58);
+			label8.Name = "label8";
+			label8.Size = new Size(242, 32);
+			label8.TabIndex = 3;
+			label8.Text = "or press CTRL + V to paste from clipboard or drag an image over into the program";
+			// 
 			// decodeSelectButton
 			// 
 			decodeSelectButton.FlatStyle = FlatStyle.System;
-			decodeSelectButton.Location = new Point(84, 71);
+			decodeSelectButton.Location = new Point(84, 58);
 			decodeSelectButton.Name = "decodeSelectButton";
 			decodeSelectButton.Size = new Size(148, 23);
 			decodeSelectButton.TabIndex = 2;
@@ -387,7 +399,7 @@
 			selectedFileLabel.AutoEllipsis = true;
 			selectedFileLabel.Location = new Point(84, 22);
 			selectedFileLabel.Name = "selectedFileLabel";
-			selectedFileLabel.Size = new Size(396, 46);
+			selectedFileLabel.Size = new Size(396, 21);
 			selectedFileLabel.TabIndex = 1;
 			selectedFileLabel.Text = "Current File:";
 			// 
@@ -480,7 +492,7 @@
 			// 
 			themeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { autoThemeToolStripMenuItem, lightThemeToolStripMenuItem, darkThemeToolStripMenuItem });
 			themeToolStripMenuItem.Name = "themeToolStripMenuItem";
-			themeToolStripMenuItem.Size = new Size(180, 22);
+			themeToolStripMenuItem.Size = new Size(178, 22);
 			themeToolStripMenuItem.Text = "Theme";
 			// 
 			// autoThemeToolStripMenuItem
@@ -510,24 +522,24 @@
 			// toolStripSeparator2
 			// 
 			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new Size(177, 6);
+			toolStripSeparator2.Size = new Size(175, 6);
 			// 
 			// saveInputToolStripMenuItem
 			// 
 			saveInputToolStripMenuItem.Name = "saveInputToolStripMenuItem";
-			saveInputToolStripMenuItem.Size = new Size(180, 22);
+			saveInputToolStripMenuItem.Size = new Size(178, 22);
 			saveInputToolStripMenuItem.Text = "Save Input";
 			saveInputToolStripMenuItem.Click += saveInputToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new Size(177, 6);
+			toolStripSeparator1.Size = new Size(175, 6);
 			// 
 			// inspectSettingsFileToolStripMenuItem
 			// 
 			inspectSettingsFileToolStripMenuItem.Name = "inspectSettingsFileToolStripMenuItem";
-			inspectSettingsFileToolStripMenuItem.Size = new Size(180, 22);
+			inspectSettingsFileToolStripMenuItem.Size = new Size(178, 22);
 			inspectSettingsFileToolStripMenuItem.Text = "Inspect Settings File";
 			inspectSettingsFileToolStripMenuItem.Click += inspectSettingsFileToolStripMenuItem_Click;
 			// 
@@ -542,6 +554,7 @@
 			// 
 			// FormMain
 			// 
+			AllowDrop = true;
 			AutoScaleDimensions = new SizeF(96F, 96F);
 			AutoScaleMode = AutoScaleMode.Dpi;
 			ClientSize = new Size(500, 450);
@@ -549,12 +562,16 @@
 			Controls.Add(menuStrip1);
 			Controls.Add(mainTabControl);
 			Icon = (Icon)resources.GetObject("$this.Icon");
+			KeyPreview = true;
 			MainMenuStrip = menuStrip1;
 			MinimumSize = new Size(400, 300);
 			Name = "FormMain";
 			Text = "QRCodeUtils.NET";
 			FormClosing += FormMain_FormClosing;
 			Load += FormMain_Load;
+			DragDrop += FormMain_DragDrop;
+			DragEnter += FormMain_DragEnter;
+			KeyDown += FormMain_KeyDown;
 			mainTabControl.ResumeLayout(false);
 			tabPageCreate.ResumeLayout(false);
 			panel1.ResumeLayout(false);
@@ -622,5 +639,6 @@
 		private ToolStripStatusLabel appStateLabel;
 		private ToolStripMenuItem checkConnectionToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator3;
+		private Label label8;
 	}
 }

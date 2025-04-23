@@ -110,5 +110,13 @@ namespace QRGen
 			e.Graphics.Clear(outputPictureBox.BackColor); //fill background to remove previously rendered images
 			e.Graphics.DrawImage(image, destRect);
 		}
+
+		private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (outputPictureBox.Image != null)
+			{
+				Clipboard.SetImage(outputPictureBox.Image);
+			}
+		}
 	}
 }

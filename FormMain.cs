@@ -1,5 +1,6 @@
 using Cyotek.Windows.Forms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using static QRGen.Program;
@@ -26,10 +27,6 @@ namespace QRGen
 			{
 				if (File.Exists(value))
 				{
-					_decodeImageFilePath = value;
-					selectedFileLabel.Text = "Current File: " + value;
-					decodeButton.Enabled = !string.IsNullOrEmpty(value);
-
 					Bitmap img;
 					try
 					{
@@ -46,12 +43,21 @@ namespace QRGen
 
 						previewPictureBox.Image = img;
 						currReadRequest.imageData = img;
+						_decodeImageFilePath = value;
+						selectedFileLabel.Text = "Current File: " + value;
+						decodeButton.Enabled = !string.IsNullOrEmpty(value);
 					}
-					catch (Exception) { }
+					catch (Exception)
+					{
+						selectedFileLabel.Text = "Current File:";
+						decodeButton.Enabled = false;
+					}
 				}
 				else
 				{
 					_decodeImageFilePath = "";
+					selectedFileLabel.Text = "Current File:";
+					decodeButton.Enabled = false;
 				}
 			}
 		}
@@ -262,5 +268,72 @@ namespace QRGen
 			decodedTextBox.Text = apiData[0].ToString();
 		}
 		#endregion
+
+		private void FormMain_DragDrop(object sender, DragEventArgs e)
+		{
+			if (mainTabControl.SelectedIndex == 0)
+			{
+				if (e.Data.GetDataPresent(DataFormats.FileDrop))
+				{
+					// Get the list of files that were dropped
+					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+					// If there are files and the first file exists
+					if (files.Length > 0 && File.Exists(files[0]))
+					{
+						encodeTextBox.Text = File.ReadAllText(files[0]);
+					}
+				}
+				else if (e.Data.GetDataPresent(DataFormats.Text))
+				{
+					string textData = (string)e.Data.GetData(DataFormats.Text);
+					encodeTextBox.Text = textData;
+				}
+			}
+			else
+			{
+				if (e.Data.GetDataPresent(DataFormats.FileDrop))
+				{
+					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+					// If there are files and the first file exists
+					if (files.Length > 0 && File.Exists(files[0]))
+					{
+						DecodeImageFilePath = files[0];
+					}
+				}
+				else if (e.Data.GetDataPresent(DataFormats.Text))
+				{
+					// If the dropped data is text, directly set it in the TextBox
+					string textData = (string)e.Data.GetData(DataFormats.Text);
+
+					if (File.Exists(textData))
+					{
+						DecodeImageFilePath = textData;
+					}
+				}
+			}
+		}
+
+		private void FormMain_DragEnter(object sender, DragEventArgs e)
+		{
+			e.Effect = DragDropEffects.Copy;
+		}
+
+		private void FormMain_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (mainTabControl.SelectedIndex == 1 && e.Control && e.KeyCode == Keys.V)
+			{
+				if (Clipboard.ContainsImage())
+				{
+					Image img = Clipboard.GetImage();
+					previewPictureBox.Image = img;
+					currReadRequest.imageData = img;
+					_decodeImageFilePath = "";
+					selectedFileLabel.Text = "Current File: From Clipboard";
+					decodeButton.Enabled = true;
+				}
+			}
+		}
 	}
 }
