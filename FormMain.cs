@@ -217,7 +217,6 @@ namespace QRGen
 
 		private async void decodeButton_Click(object sender, EventArgs e)
 		{
-			Debug.WriteLine(currReadRequest.ToString());
 			string apiOutput = await ApiUtil.GetApiData(currReadRequest.ToString(), currReadRequest.ToRestRequest());
 
 			if (string.IsNullOrEmpty(apiOutput))
