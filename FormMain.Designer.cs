@@ -58,8 +58,11 @@
 			previewPictureBox = new PictureBox();
 			label2 = new Label();
 			statusStrip1 = new StatusStrip();
+			appStateLabel = new ToolStripStatusLabel();
 			menuStrip1 = new MenuStrip();
 			fileToolStripMenuItem = new ToolStripMenuItem();
+			checkConnectionToolStripMenuItem = new ToolStripMenuItem();
+			toolStripSeparator3 = new ToolStripSeparator();
 			exitToolStripMenuItem = new ToolStripMenuItem();
 			settingsToolStripMenuItem = new ToolStripMenuItem();
 			themeToolStripMenuItem = new ToolStripMenuItem();
@@ -81,6 +84,7 @@
 			panel2.SuspendLayout();
 			groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)previewPictureBox).BeginInit();
+			statusStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -412,12 +416,19 @@
 			// 
 			statusStrip1.BackColor = SystemColors.ControlLight;
 			statusStrip1.GripStyle = ToolStripGripStyle.Visible;
+			statusStrip1.Items.AddRange(new ToolStripItem[] { appStateLabel });
 			statusStrip1.Location = new Point(0, 428);
 			statusStrip1.Name = "statusStrip1";
 			statusStrip1.RenderMode = ToolStripRenderMode.System;
 			statusStrip1.Size = new Size(500, 22);
 			statusStrip1.TabIndex = 1;
 			statusStrip1.Text = "statusStrip1";
+			// 
+			// appStateLabel
+			// 
+			appStateLabel.Name = "appStateLabel";
+			appStateLabel.Size = new Size(96, 17);
+			appStateLabel.Text = "Status: Unknown";
 			// 
 			// menuStrip1
 			// 
@@ -431,17 +442,30 @@
 			// 
 			// fileToolStripMenuItem
 			// 
-			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem });
+			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkConnectionToolStripMenuItem, toolStripSeparator3, exitToolStripMenuItem });
 			fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			fileToolStripMenuItem.Size = new Size(37, 20);
-			fileToolStripMenuItem.Text = "File";
+			fileToolStripMenuItem.Size = new Size(65, 20);
+			fileToolStripMenuItem.Text = "Program";
 			fileToolStripMenuItem.TextImageRelation = TextImageRelation.Overlay;
+			// 
+			// checkConnectionToolStripMenuItem
+			// 
+			checkConnectionToolStripMenuItem.Name = "checkConnectionToolStripMenuItem";
+			checkConnectionToolStripMenuItem.ShortcutKeys = Keys.F5;
+			checkConnectionToolStripMenuItem.Size = new Size(191, 22);
+			checkConnectionToolStripMenuItem.Text = "Check Connection";
+			checkConnectionToolStripMenuItem.Click += checkConnectionToolStripMenuItem_Click;
+			// 
+			// toolStripSeparator3
+			// 
+			toolStripSeparator3.Name = "toolStripSeparator3";
+			toolStripSeparator3.Size = new Size(188, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			exitToolStripMenuItem.ShortcutKeyDisplayString = "Alt+F4";
-			exitToolStripMenuItem.Size = new Size(135, 22);
+			exitToolStripMenuItem.Size = new Size(191, 22);
 			exitToolStripMenuItem.Text = "Exit";
 			exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
 			// 
@@ -456,7 +480,7 @@
 			// 
 			themeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { autoThemeToolStripMenuItem, lightThemeToolStripMenuItem, darkThemeToolStripMenuItem });
 			themeToolStripMenuItem.Name = "themeToolStripMenuItem";
-			themeToolStripMenuItem.Size = new Size(178, 22);
+			themeToolStripMenuItem.Size = new Size(180, 22);
 			themeToolStripMenuItem.Text = "Theme";
 			// 
 			// autoThemeToolStripMenuItem
@@ -486,24 +510,24 @@
 			// toolStripSeparator2
 			// 
 			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new Size(175, 6);
+			toolStripSeparator2.Size = new Size(177, 6);
 			// 
 			// saveInputToolStripMenuItem
 			// 
 			saveInputToolStripMenuItem.Name = "saveInputToolStripMenuItem";
-			saveInputToolStripMenuItem.Size = new Size(178, 22);
+			saveInputToolStripMenuItem.Size = new Size(180, 22);
 			saveInputToolStripMenuItem.Text = "Save Input";
 			saveInputToolStripMenuItem.Click += saveInputToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new Size(175, 6);
+			toolStripSeparator1.Size = new Size(177, 6);
 			// 
 			// inspectSettingsFileToolStripMenuItem
 			// 
 			inspectSettingsFileToolStripMenuItem.Name = "inspectSettingsFileToolStripMenuItem";
-			inspectSettingsFileToolStripMenuItem.Size = new Size(178, 22);
+			inspectSettingsFileToolStripMenuItem.Size = new Size(180, 22);
 			inspectSettingsFileToolStripMenuItem.Text = "Inspect Settings File";
 			inspectSettingsFileToolStripMenuItem.Click += inspectSettingsFileToolStripMenuItem_Click;
 			// 
@@ -511,6 +535,8 @@
 			// 
 			openFileDialog1.DefaultExt = "png";
 			openFileDialog1.Filter = "PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tiff;*.tif)|*.tiff;*.tif";
+			openFileDialog1.ReadOnlyChecked = true;
+			openFileDialog1.RestoreDirectory = true;
 			openFileDialog1.ShowPreview = true;
 			openFileDialog1.Title = "Open a QR code";
 			// 
@@ -541,6 +567,8 @@
 			panel2.PerformLayout();
 			groupBox3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)previewPictureBox).EndInit();
+			statusStrip1.ResumeLayout(false);
+			statusStrip1.PerformLayout();
 			menuStrip1.ResumeLayout(false);
 			menuStrip1.PerformLayout();
 			ResumeLayout(false);
@@ -591,5 +619,8 @@
 		private TextBox decodedTextBox;
 		private Label label7;
 		private OpenFileDialog openFileDialog1;
+		private ToolStripStatusLabel appStateLabel;
+		private ToolStripMenuItem checkConnectionToolStripMenuItem;
+		private ToolStripSeparator toolStripSeparator3;
 	}
 }

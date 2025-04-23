@@ -64,6 +64,31 @@ namespace QRGen
 	public static class ApiUtil
 	{
 		/// <summary>
+		/// Checks if you can reach the current baseUrl.
+		/// </summary>
+		/// <param name="baseUrl">The baseUrl to check.</param>
+		/// <returns>Whether baseUrl is reachable or not.</returns>
+		public static async Task<bool> CheckUrlAsync(string baseUrl)
+		{
+			try
+			{
+				RestClient client = new RestClient(baseUrl);
+				RestRequest request = new RestRequest("", Method.Get);
+
+				// Make a request to the API
+				var response = await client.ExecuteAsync(request);
+
+				// Check if the response is successful
+				return response.IsSuccessful;
+			}
+			catch (Exception)
+			{
+				// If there is an exception (e.g. no network), return false
+				return false;
+			}
+		}
+
+		/// <summary>
 		/// Gets a Response Content string from a URL and an endpoint.
 		/// </summary>
 		/// <param name="baseUrl">The Base URL of the website.</param>

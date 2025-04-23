@@ -30,10 +30,20 @@ namespace QRGen
 					selectedFileLabel.Text = "Current File: " + value;
 					decodeButton.Enabled = !string.IsNullOrEmpty(value);
 
-					Image img;
+					Bitmap img;
 					try
 					{
-						img = Image.FromFile(value);
+						// Create a copy of the file and load the image from that copy
+						using (var fileStream = new FileStream(value, FileMode.Open, FileAccess.Read))
+						{
+							using (var memoryStream = new MemoryStream())
+							{
+								fileStream.CopyTo(memoryStream); // Copy file content into MemoryStream
+								memoryStream.Seek(0, SeekOrigin.Begin); // Rewind memory stream to the start
+								img = new Bitmap(memoryStream); // Create Bitmap from MemoryStream
+							}
+						}
+
 						previewPictureBox.Image = img;
 						currReadRequest.imageData = img;
 					}
@@ -57,9 +67,9 @@ namespace QRGen
 			colorPicker = Util.NewFixedColorPickerDialog();
 		}
 
-		private void FormMain_Load(object sender, EventArgs e)
+		private async void FormMain_Load(object sender, EventArgs e)
 		{
-
+			CheckConnection();
 			#region Setting Category Grouping
 			themeStipMenuItems = [lightThemeToolStripMenuItem, autoThemeToolStripMenuItem, darkThemeToolStripMenuItem];
 			#endregion
@@ -94,6 +104,16 @@ namespace QRGen
 			#endregion
 		}
 
+		private async void CheckConnection()
+		{
+			bool connected = await ApiUtil.CheckUrlAsync("https://goqr.me");
+			appStateLabel.Text = "Status: " + (connected ? "Ready" : "Service unavailable");
+			if (!connected)
+			{
+				MessageBox.Show("Connection failed! This app will not work correctly, check your internet connection and try again.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
 		private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			#region Save Input
@@ -114,6 +134,12 @@ namespace QRGen
 		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void checkConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			appStateLabel.Text = "Status: Unknown";
+			CheckConnection();
 		}
 
 		#region Settings Tab
