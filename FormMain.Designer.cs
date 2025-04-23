@@ -49,7 +49,7 @@
 			label1 = new Label();
 			tabPageRead = new TabPage();
 			panel2 = new Panel();
-			textBox1 = new TextBox();
+			decodedTextBox = new TextBox();
 			label7 = new Label();
 			decodeButton = new Button();
 			groupBox3 = new GroupBox();
@@ -305,7 +305,7 @@
 			// 
 			panel2.AutoScroll = true;
 			panel2.BackColor = SystemColors.ControlLightLight;
-			panel2.Controls.Add(textBox1);
+			panel2.Controls.Add(decodedTextBox);
 			panel2.Controls.Add(label7);
 			panel2.Controls.Add(decodeButton);
 			panel2.Controls.Add(groupBox3);
@@ -316,20 +316,19 @@
 			panel2.Size = new Size(486, 359);
 			panel2.TabIndex = 2;
 			// 
-			// textBox1
+			// decodedTextBox
 			// 
-			textBox1.AcceptsReturn = true;
-			textBox1.BackColor = SystemColors.ControlLightLight;
-			textBox1.Dock = DockStyle.Top;
-			textBox1.Location = new Point(0, 176);
-			textBox1.Multiline = true;
-			textBox1.Name = "textBox1";
-			textBox1.PlaceholderText = "Decoded data will show up here.";
-			textBox1.ReadOnly = true;
-			textBox1.ScrollBars = ScrollBars.Vertical;
-			textBox1.ShortcutsEnabled = false;
-			textBox1.Size = new Size(486, 60);
-			textBox1.TabIndex = 5;
+			decodedTextBox.AcceptsReturn = true;
+			decodedTextBox.BackColor = SystemColors.ControlLightLight;
+			decodedTextBox.Dock = DockStyle.Fill;
+			decodedTextBox.Location = new Point(0, 176);
+			decodedTextBox.Multiline = true;
+			decodedTextBox.Name = "decodedTextBox";
+			decodedTextBox.PlaceholderText = "Decoded data will show up here.";
+			decodedTextBox.ReadOnly = true;
+			decodedTextBox.ScrollBars = ScrollBars.Vertical;
+			decodedTextBox.Size = new Size(486, 183);
+			decodedTextBox.TabIndex = 5;
 			// 
 			// label7
 			// 
@@ -352,6 +351,7 @@
 			decodeButton.TabIndex = 3;
 			decodeButton.Text = "Decode";
 			decodeButton.UseVisualStyleBackColor = true;
+			decodeButton.Click += decodeButton_Click;
 			// 
 			// groupBox3
 			// 
@@ -380,12 +380,12 @@
 			// selectedFileLabel
 			// 
 			selectedFileLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			selectedFileLabel.AutoEllipsis = true;
 			selectedFileLabel.Location = new Point(84, 22);
 			selectedFileLabel.Name = "selectedFileLabel";
-			selectedFileLabel.Size = new Size(396, 23);
+			selectedFileLabel.Size = new Size(396, 46);
 			selectedFileLabel.TabIndex = 1;
-			selectedFileLabel.Text = "Current file:";
-			selectedFileLabel.TextAlign = ContentAlignment.MiddleLeft;
+			selectedFileLabel.Text = "Current File:";
 			// 
 			// previewPictureBox
 			// 
@@ -527,6 +527,7 @@
 			MinimumSize = new Size(400, 300);
 			Name = "FormMain";
 			Text = "QRCodeUtils.NET";
+			FormClosing += FormMain_FormClosing;
 			Load += FormMain_Load;
 			mainTabControl.ResumeLayout(false);
 			tabPageCreate.ResumeLayout(false);
@@ -587,7 +588,7 @@
 		private Button decodeSelectButton;
 		private Label selectedFileLabel;
 		private Button decodeButton;
-		private TextBox textBox1;
+		private TextBox decodedTextBox;
 		private Label label7;
 		private OpenFileDialog openFileDialog1;
 	}

@@ -1,4 +1,5 @@
 using Cyotek.Windows.Forms;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Diagnostics;
 using static QRGen.Program;
@@ -10,18 +11,55 @@ namespace QRGen
 	/// </summary>
 	public partial class FormMain : Form
 	{
+
+		public APIGenerateQRRequest currRequest;
+		public APIReadQRRequest currReadRequest;
+
+		public ColorPickerDialog colorPicker;
+		string _decodeImageFilePath = "";
+
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public string DecodeImageFilePath
+		{
+			get => _decodeImageFilePath;
+			set
+			{
+				if (File.Exists(value))
+				{
+					_decodeImageFilePath = value;
+					selectedFileLabel.Text = "Current File: " + value;
+					decodeButton.Enabled = !string.IsNullOrEmpty(value);
+
+					Image img;
+					try
+					{
+						img = Image.FromFile(value);
+						previewPictureBox.Image = img;
+						currReadRequest.imageData = img;
+					}
+					catch (Exception) { }
+				}
+				else
+				{
+					_decodeImageFilePath = "";
+				}
+			}
+		}
+
 		public FormMain()
 		{
 			InitializeComponent();
+
+			//Create requests
 			currRequest = new();
+			currReadRequest = new();
+
 			colorPicker = Util.NewFixedColorPickerDialog();
 		}
 
-		public APIRequest currRequest;
-		public ColorPickerDialog colorPicker;
-
 		private void FormMain_Load(object sender, EventArgs e)
 		{
+
 			#region Setting Category Grouping
 			themeStipMenuItems = [lightThemeToolStripMenuItem, autoThemeToolStripMenuItem, darkThemeToolStripMenuItem];
 			#endregion
@@ -31,15 +69,44 @@ namespace QRGen
 			for (int i = 0; i < themeStipMenuItems.Length; i++)
 			{
 				var item = themeStipMenuItems[i];
-				item.Checked = i == appSettings.Data.Theme;
+				item.Checked = i == appSettingsData.Theme;
 			}
 
 			//Save Input
-			saveInputToolStripMenuItem.Checked = appSettings.Data.SaveInput;
+			saveInputToolStripMenuItem.Checked = appSettingsData.SaveInput;
+
+			//Load Saved Input if desired
+			if (saveInputToolStripMenuItem.Checked)
+			{
+				encodeTextBox.Text = appSettingsData.PreviousInputs.TryGetValue("encodeTextBoxText", out string encodeTextBoxText) ? encodeTextBoxText : "";
+
+				eccComboBox.SelectedIndex = appSettingsData.PreviousInputs.TryGetValue("eccComboBoxSelectedIndex", out string eccComboBoxSelectedIndexString) ? (int.TryParse(eccComboBoxSelectedIndexString, out int eccComboBoxSelectedIndex) ? eccComboBoxSelectedIndex : 0) : 0;
+
+				DecodeImageFilePath = appSettingsData.PreviousInputs.TryGetValue("decodeImageFilePath", out string decodeImageFilePath) ? decodeImageFilePath : "";
+			}
 			#endregion
 
 			#region Body Load
-			eccComboBox.SelectedIndex = 0; //select first option
+			if (eccComboBox.SelectedIndex < 0)
+			{
+				eccComboBox.SelectedIndex = 0; //select first option if -1
+			}
+			#endregion
+		}
+
+		private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			#region Save Input
+			if (appSettingsData.SaveInput)
+			{
+				appSettingsData.PreviousInputs["encodeTextBoxText"] = encodeTextBox.Text;
+
+				appSettingsData.PreviousInputs["eccComboBoxSelectedIndex"] = eccComboBox.SelectedIndex.ToString();
+
+				appSettingsData.PreviousInputs["decodeImageFilePath"] = DecodeImageFilePath;
+
+				appSettings.Save();
+			}
 			#endregion
 		}
 
@@ -54,12 +121,12 @@ namespace QRGen
 		private void themeToolStripMenuItem_Click(object senderAny, EventArgs e)
 		{
 			ToolStripMenuItem sender = (ToolStripMenuItem)senderAny;
-			appSettings.Data.Theme = int.TryParse(sender.Tag.ToString(), out int r) ? r : 0;
+			appSettingsData.Theme = int.TryParse(sender.Tag.ToString(), out int r) ? r : 0;
 
 			for (int i = 0; i < themeStipMenuItems.Length; i++)
 			{
 				var item = themeStipMenuItems[i];
-				item.Checked = i == appSettings.Data.Theme;
+				item.Checked = i == appSettingsData.Theme;
 			}
 
 			appSettings.Save();
@@ -91,14 +158,14 @@ namespace QRGen
 
 		private void saveInputToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			appSettings.Data.SaveInput = !appSettings.Data.SaveInput;
-			saveInputToolStripMenuItem.Checked = appSettings.Data.SaveInput;
+			appSettingsData.SaveInput = !appSettingsData.SaveInput;
+			saveInputToolStripMenuItem.Checked = appSettingsData.SaveInput;
 			appSettings.Save();
 		}
 		#endregion
 		#endregion
 
-		#region Create Body
+		#region "Create" Body
 
 		private void encodeTextBox_TextChanged(object sender, EventArgs e)
 		{
@@ -134,14 +201,41 @@ namespace QRGen
 		private async void createButton_ClickAsync(object sender, EventArgs e)
 		{
 			FormOutput outputForm = new();
-			outputForm.outputPictureBox.Image = await ApiUtil.LoadImageFromUrlAsync(currRequest.ToString());
+			outputForm.outputPictureBox.Image = new Bitmap(await ApiUtil.LoadImageFromUrlAsync(currRequest.ToString()));
 			outputForm.Show();
 		}
 		#endregion
 
+		#region "Read" Body
 		private void decodeSelectButton_Click(object sender, EventArgs e)
 		{
-			openFileDialog1.ShowDialog();
+			if (openFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				DecodeImageFilePath = openFileDialog1.FileName;
+			}
 		}
+
+		private async void decodeButton_Click(object sender, EventArgs e)
+		{
+			Debug.WriteLine(currReadRequest.ToString());
+			string apiOutput = await ApiUtil.GetApiData(currReadRequest.ToString(), currReadRequest.ToRestRequest());
+
+			if (string.IsNullOrEmpty(apiOutput))
+			{
+				MessageBox.Show("Api returned no data!", "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			List<APIReadQRRequestData> apiData = JsonConvert.DeserializeObject<List<APIReadQRRequestData>>(apiOutput);
+
+			if (apiData == null || apiData.Count == 0)
+			{
+				MessageBox.Show("Api returned invalid data!", "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			decodedTextBox.Text = apiData[0].ToString();
+		}
+		#endregion
 	}
 }

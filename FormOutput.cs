@@ -62,13 +62,13 @@ namespace QRGen
 					}
 					catch (Exception ex)
 					{
-						MessageBox.Show("Failed to save image:\n" + ex.Message);
+						MessageBox.Show("Failed to save image:\n" + ex.Message, "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 			}
 			else
 			{
-				MessageBox.Show("No image in the PictureBox.");
+				MessageBox.Show("No image in the PictureBox.", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 

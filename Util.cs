@@ -92,6 +92,37 @@ namespace QRGen
 			}
 			return null;
 		}
+
+		/// <summary>
+		/// Gets a Response Content string from a URL and a RestRequest.
+		/// </summary>
+		/// <param name="baseUrl">The Base URL of the website.</param>
+		/// <param name="request">Request to execute</param>
+		/// <returns></returns>
+		public static async Task<string?> GetApiData(string baseUrl, RestRequest request)
+		{
+			try
+			{
+				RestClient restClient = new(baseUrl);
+				var rsp = await restClient.ExecuteAsync(request); // Perform the request
+
+				if (rsp.IsSuccessful && rsp.Content != null)
+				{
+					return rsp.Content;
+				}
+				else
+				{
+					MessageBox.Show($"Failed to execute: {rsp.StatusCode}");
+				}
+				restClient.Dispose();
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show($"Failed to execute: {e.Message}");
+			}
+			return null;
+		}
+
 		/// <summary>
 		/// Loads and returns an image from a website URL.
 		/// </summary>
