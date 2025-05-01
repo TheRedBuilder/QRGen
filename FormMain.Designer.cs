@@ -356,7 +356,7 @@
 			decodeButton.TabIndex = 3;
 			decodeButton.Text = "Decode";
 			decodeButton.UseVisualStyleBackColor = true;
-			decodeButton.Click += decodeButton_Click;
+			decodeButton.Click += decodeButton_ClickAsync;
 			// 
 			// groupBox3
 			// 
@@ -421,7 +421,7 @@
 			label2.Name = "label2";
 			label2.Size = new Size(486, 30);
 			label2.TabIndex = 0;
-			label2.Text = "Read a QR Code";
+			label2.Text = "Read QR Codes";
 			label2.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// statusStrip1
@@ -546,7 +546,7 @@
 			// openFileDialog1
 			// 
 			openFileDialog1.DefaultExt = "png";
-			openFileDialog1.Filter = "PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tiff;*.tif)|*.tiff;*.tif";
+			openFileDialog1.Filter = "Image Files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.tif|PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tiff;*.tif)|*.tiff;*.tif";
 			openFileDialog1.ReadOnlyChecked = true;
 			openFileDialog1.RestoreDirectory = true;
 			openFileDialog1.ShowPreview = true;

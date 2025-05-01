@@ -118,7 +118,7 @@ namespace QRGen
 		/// <param name="baseUrl">The Base URL of the website.</param>
 		/// <param name="subUrl">The Endpoint Sub URL.</param>
 		/// <returns>Response Content string.</returns>
-		public static async Task<string?> GetApiData(string baseUrl, string subUrl)
+		public static async Task<string?> GetApiDataAsync(string baseUrl, string subUrl)
 		{
 			try
 			{
@@ -148,7 +148,7 @@ namespace QRGen
 		/// <param name="baseUrl">The Base URL of the website.</param>
 		/// <param name="request">Request to execute</param>
 		/// <returns></returns>
-		public static async Task<string?> GetApiData(string baseUrl, RestRequest request)
+		public static async Task<string?> GetApiDataAsync(string baseUrl, RestRequest request)
 		{
 			try
 			{

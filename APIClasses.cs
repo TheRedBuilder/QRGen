@@ -49,6 +49,16 @@ namespace QRGen
 
 			return sb.ToString();
 		}
+
+		/// <summary>
+		/// Executes this API Request.
+		/// </summary>
+		/// <returns>The generated Image.</returns>
+		public async Task<Image> Execute()
+		{
+			var image = await ApiUtil.LoadImageFromUrlAsync(this.ToString());
+			return image ?? new Bitmap(1, 1);
+		}
 	}
 
 	/// <summary>
@@ -62,21 +72,27 @@ namespace QRGen
 		/// Constructs a RestSharp request to upload the image for QR code reading.
 		/// </summary>
 		/// <returns>A ready-to-send RestRequest object.</returns>
-		public RestRequest ToRestRequest()
+		public RestRequest? ToRestRequest()
 		{
 			if (imageData == null)
 				return null;
 
-			var request = new RestRequest();
-			request.Method = Method.Post;
-
-			// Save image to memory stream as PNG
 			using var ms = new MemoryStream();
 			imageData.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-			ms.Position = 0;
+			byte[] imageBytes = ms.ToArray();
 
-			// Add file as multipart/form-data
-			request.AddFile("file", ms.ToArray(), "upload.png", "image/png");
+			// 1 MiB size limit check (1,048,576 bytes, split up for clarity sake)
+			const int MaxSizeBytes = 1 * 1024 * 1024;
+			if (imageBytes.Length > MaxSizeBytes)
+			{
+				MessageBox.Show("The image is too large. Maximum allowed size is 1 MiB.", "Upload Error",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			}
+
+			var request = new RestRequest();
+			request.Method = Method.Post;
+			request.AddFile("file", imageBytes, "upload.png", "image/png");
 
 			return request;
 		}
@@ -88,6 +104,38 @@ namespace QRGen
 		public override string ToString()
 		{
 			return "https://api.qrserver.com/v1/read-qr-code/?";
+		}
+
+		/// <summary>
+		/// Executes this API Request.
+		/// </summary>
+		/// <returns>The read QR data or empty string if the request fails.</returns>
+		public async Task<string> ExecuteAsync()
+		{
+			var request = this.ToRestRequest();
+
+			if (request == null)
+			{
+				return string.Empty;
+			}
+
+			string apiOutput = await ApiUtil.GetApiDataAsync(this.ToString(), request);
+
+			if (string.IsNullOrEmpty(apiOutput))
+			{
+				MessageBox.Show("Api returned no data!", "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return string.Empty;
+			}
+
+			List<APIReadQRRequestData> apiData = JsonConvert.DeserializeObject<List<APIReadQRRequestData>>(apiOutput);
+
+			if (apiData == null || apiData.Count == 0)
+			{
+				MessageBox.Show("Api returned invalid data!", "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return string.Empty;
+			}
+
+			return apiData[0].ToString();
 		}
 	}
 
@@ -103,7 +151,7 @@ namespace QRGen
 		public List<QRSymbol> Symbols { get; set; } = new();
 
 		/// <summary>
-		/// Splits any symbol that has multiple QR codes inside it (delimited by "\nQR-Code:").
+		/// Splits any symbol that has multiple QR codes inside it (delimited by "QR-Code:").
 		/// </summary>
 		public void Normalize()
 		{

@@ -132,13 +132,9 @@ namespace QRGen
 			if (appSettingsData.SaveInput)
 			{
 				appSettingsData.PreviousInputs["encodeTextBoxText"] = encodeTextBox.Text;
-
 				appSettingsData.PreviousInputs["eccComboBoxSelectedIndex"] = eccComboBox.SelectedIndex.ToString();
-
 				appSettingsData.PreviousInputs["qrBackgroundColor"] = Util.ColorToHex(currRequest.backgroundColor, true);
-
 				appSettingsData.PreviousInputs["qrForegroundColor"] = Util.ColorToHex(currRequest.foregroundColor, true);
-
 				appSettingsData.PreviousInputs["decodeImageFilePath"] = DecodeImageFilePath;
 
 				appSettings.Save();
@@ -243,7 +239,7 @@ namespace QRGen
 		private async void createButton_ClickAsync(object sender, EventArgs e)
 		{
 			FormOutput outputForm = new();
-			outputForm.outputPictureBox.Image = new Bitmap(await ApiUtil.LoadImageFromUrlAsync(currRequest.ToString()));
+			outputForm.outputPictureBox.Image = await currRequest.Execute();
 			outputForm.Show();
 		}
 		#endregion
@@ -257,25 +253,9 @@ namespace QRGen
 			}
 		}
 
-		private async void decodeButton_Click(object sender, EventArgs e)
+		private async void decodeButton_ClickAsync(object sender, EventArgs e)
 		{
-			string apiOutput = await ApiUtil.GetApiData(currReadRequest.ToString(), currReadRequest.ToRestRequest());
-
-			if (string.IsNullOrEmpty(apiOutput))
-			{
-				MessageBox.Show("Api returned no data!", "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-
-			List<APIReadQRRequestData> apiData = JsonConvert.DeserializeObject<List<APIReadQRRequestData>>(apiOutput);
-
-			if (apiData == null || apiData.Count == 0)
-			{
-				MessageBox.Show("Api returned invalid data!", "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-
-			decodedTextBox.Text = apiData[0].ToString();
+			decodedTextBox.Text = await currReadRequest.ExecuteAsync();
 		}
 		#endregion
 
