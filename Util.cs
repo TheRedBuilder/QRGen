@@ -182,7 +182,7 @@ namespace QRGen
 			try
 			{
 				RestClient restClient = new RestClient(url);
-				byte[] imageData = await restClient.DownloadDataAsync(new("", Method.Get)); //Get the image stream
+				byte[] imageData = await restClient.DownloadDataAsync(new("", Method.Get)); //Get the image stream, try-catch handles the CS8600 warning.
 				Stream fileStream = new MemoryStream(imageData);
 
 				restClient.Dispose();

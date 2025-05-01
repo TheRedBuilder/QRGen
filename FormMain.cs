@@ -75,16 +75,16 @@ namespace QRGen
 
 		private async void FormMain_Load(object sender, EventArgs e)
 		{
-			CheckConnection();
+			await CheckConnection();
 			#region Setting Category Grouping
-			themeStipMenuItems = [lightThemeToolStripMenuItem, autoThemeToolStripMenuItem, darkThemeToolStripMenuItem];
+			themeStripMenuItems = [lightThemeToolStripMenuItem, autoThemeToolStripMenuItem, darkThemeToolStripMenuItem];
 			#endregion
 
 			#region Settings Load
 			//Theme
-			for (int i = 0; i < themeStipMenuItems.Length; i++)
+			for (int i = 0; i < themeStripMenuItems.Length; i++)
 			{
-				var item = themeStipMenuItems[i];
+				var item = themeStripMenuItems[i];
 				item.Checked = i == appSettingsData.Theme;
 			}
 
@@ -116,7 +116,7 @@ namespace QRGen
 			#endregion
 		}
 
-		private async void CheckConnection()
+		private async Task CheckConnection()
 		{
 			bool connected = await ApiUtil.CheckUrlAsync("https://goqr.me");
 			appStateLabel.Text = "Status: " + (connected ? "Ready" : "Service unavailable");
@@ -148,22 +148,22 @@ namespace QRGen
 			Application.Exit();
 		}
 
-		private void checkConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+		private async void checkConnectionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			appStateLabel.Text = "Status: Unknown";
-			CheckConnection();
+			await CheckConnection();
 		}
 
 		#region Settings Tab
-		ToolStripMenuItem[] themeStipMenuItems;
+		ToolStripMenuItem[] themeStripMenuItems;
 		private void themeToolStripMenuItem_Click(object senderAny, EventArgs e)
 		{
 			ToolStripMenuItem sender = (ToolStripMenuItem)senderAny;
-			appSettingsData.Theme = int.TryParse(sender.Tag.ToString(), out int r) ? r : 0;
+			appSettingsData.Theme = int.TryParse(sender.Tag.ToString(), out int r) ? r : 0; //these WILL always have the Tag, if not this exception should make the programmer aware of it.
 
-			for (int i = 0; i < themeStipMenuItems.Length; i++)
+			for (int i = 0; i < themeStripMenuItems.Length; i++)
 			{
-				var item = themeStipMenuItems[i];
+				var item = themeStripMenuItems[i];
 				item.Checked = i == appSettingsData.Theme;
 			}
 
@@ -261,11 +261,16 @@ namespace QRGen
 
 		private void FormMain_DragDrop(object sender, DragEventArgs e)
 		{
+			if (e.Data == null)
+			{
+				return;
+			}
+
 			if (mainTabControl.SelectedIndex == 0)
 			{
 				if (e.Data.GetDataPresent(DataFormats.FileDrop))
 				{
-					// Get the list of files that were dropped
+					// Get the list of files that were dropped, that null reference shouldn't cause any issues in this case, as the if above shouldnt pass when it is empty
 					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
 					// If there are files and the first file exists
@@ -316,7 +321,7 @@ namespace QRGen
 			{
 				if (Clipboard.ContainsImage())
 				{
-					Image img = Clipboard.GetImage();
+					Image img = Clipboard.GetImage(); //Again, this shouldn't ever be null as otherwise the if above won't pass
 					previewPictureBox.Image = img;
 					currReadRequest.imageData = img;
 					_decodeImageFilePath = "";
