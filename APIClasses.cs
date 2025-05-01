@@ -67,6 +67,8 @@ namespace QRGen
 	public class APIReadQRRequest
 	{
 		public Image imageData = null;
+		// 1 MiB size limit check (1,048,576 bytes, split up for clarity sake)
+		public const int ImageMaxSizeBytes = 1 * 1024 * 1024;
 
 		/// <summary>
 		/// Constructs a RestSharp request to upload the image for QR code reading.
@@ -80,10 +82,7 @@ namespace QRGen
 			using var ms = new MemoryStream();
 			imageData.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 			byte[] imageBytes = ms.ToArray();
-
-			// 1 MiB size limit check (1,048,576 bytes, split up for clarity sake)
-			const int MaxSizeBytes = 1 * 1024 * 1024;
-			if (imageBytes.Length > MaxSizeBytes)
+			if (imageBytes.Length > ImageMaxSizeBytes)
 			{
 				MessageBox.Show("The image is too large. Maximum allowed size is 1 MiB.", "Upload Error",
 					MessageBoxButtons.OK, MessageBoxIcon.Error);

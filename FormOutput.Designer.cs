@@ -28,18 +28,22 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			components = new System.ComponentModel.Container();
 			menuStrip1 = new MenuStrip();
 			fileToolStripMenuItem = new ToolStripMenuItem();
 			saveToolStripMenuItem = new ToolStripMenuItem();
 			toolStripMenuItem1 = new ToolStripMenuItem();
+			toolStripSeparator2 = new ToolStripSeparator();
+			copyToolStripMenuItem = new ToolStripMenuItem();
 			toolStripSeparator1 = new ToolStripSeparator();
 			exitToolStripMenuItem = new ToolStripMenuItem();
 			outputPictureBox = new PictureBox();
 			saveFileDialog1 = new SaveFileDialog();
-			copyToolStripMenuItem = new ToolStripMenuItem();
-			toolStripSeparator2 = new ToolStripSeparator();
+			contextMenuStrip1 = new ContextMenuStrip(components);
+			copyToolStripMenuItem1 = new ToolStripMenuItem();
 			menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)outputPictureBox).BeginInit();
+			contextMenuStrip1.SuspendLayout();
 			SuspendLayout();
 			// 
 			// menuStrip1
@@ -76,6 +80,19 @@
 			toolStripMenuItem1.Text = "Save As";
 			toolStripMenuItem1.Click += saveToolStripMenuItem_Click;
 			// 
+			// toolStripSeparator2
+			// 
+			toolStripSeparator2.Name = "toolStripSeparator2";
+			toolStripSeparator2.Size = new Size(183, 6);
+			// 
+			// copyToolStripMenuItem
+			// 
+			copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+			copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
+			copyToolStripMenuItem.Size = new Size(186, 22);
+			copyToolStripMenuItem.Text = "Copy";
+			copyToolStripMenuItem.Click += copyToolStripMenuItem_Click;
+			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
@@ -92,6 +109,7 @@
 			// outputPictureBox
 			// 
 			outputPictureBox.BorderStyle = BorderStyle.FixedSingle;
+			outputPictureBox.ContextMenuStrip = contextMenuStrip1;
 			outputPictureBox.Dock = DockStyle.Fill;
 			outputPictureBox.Location = new Point(0, 24);
 			outputPictureBox.Name = "outputPictureBox";
@@ -107,18 +125,20 @@
 			saveFileDialog1.Filter = "PNG (*.png)|*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Bitmap (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tiff;*.tif)|*.tiff;*.tif";
 			saveFileDialog1.Title = "Save QR Code";
 			// 
-			// copyToolStripMenuItem
+			// contextMenuStrip1
 			// 
-			copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-			copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
-			copyToolStripMenuItem.Size = new Size(186, 22);
-			copyToolStripMenuItem.Text = "Copy";
-			copyToolStripMenuItem.Click += copyToolStripMenuItem_Click;
+			contextMenuStrip1.Items.AddRange(new ToolStripItem[] { copyToolStripMenuItem1 });
+			contextMenuStrip1.Name = "contextMenuStrip1";
+			contextMenuStrip1.RenderMode = ToolStripRenderMode.System;
+			contextMenuStrip1.Size = new Size(145, 26);
 			// 
-			// toolStripSeparator2
+			// copyToolStripMenuItem1
 			// 
-			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new Size(183, 6);
+			copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
+			copyToolStripMenuItem1.ShortcutKeyDisplayString = "Ctrl+C";
+			copyToolStripMenuItem1.Size = new Size(144, 22);
+			copyToolStripMenuItem1.Text = "Copy";
+			copyToolStripMenuItem1.Click += copyToolStripMenuItem_Click;
 			// 
 			// FormOutput
 			// 
@@ -135,6 +155,7 @@
 			menuStrip1.ResumeLayout(false);
 			menuStrip1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)outputPictureBox).EndInit();
+			contextMenuStrip1.ResumeLayout(false);
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -151,5 +172,7 @@
 		private SaveFileDialog saveFileDialog1;
 		private ToolStripSeparator toolStripSeparator2;
 		private ToolStripMenuItem copyToolStripMenuItem;
+		private ContextMenuStrip contextMenuStrip1;
+		private ToolStripMenuItem copyToolStripMenuItem1;
 	}
 }
