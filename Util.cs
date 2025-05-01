@@ -13,11 +13,35 @@ namespace QRGen
 		/// Converts a .NET Color class to a Hex string.
 		/// </summary>
 		/// <param name="c">Color to be converted.</param>
+		/// <param includeHashtag="c">Whether or not to include a hashtag in front of the hex string.</param>
 		/// <returns>Color Hex string.</returns>
-		public static string ColorToHex(Color c)
+		public static string ColorToHex(Color c, bool includeHashtag = false)
 		{
-			return $"{c.R:X2}{c.G:X2}{c.B:X2}";
+			return $"{(includeHashtag ? "#" : "")}{c.R:X2}{c.G:X2}{c.B:X2}";
 		}
+
+		/// <summary>
+		/// Converts a hex string to a .NET Color.
+		/// </summary>
+		/// <param name="hexColor">Color hex string to be converted.</param>
+		/// <param name="fallback">Fallback color if hexColor is invalid. Defaults to Color.Empty.</param>
+		/// <returns>The parsed Color or fallback (Color.Empty if not provided).</returns>
+		public static Color HexToColor(string hexColor, Color? fallback = null)
+		{
+			if (!hexColor.StartsWith('#'))
+			{
+				hexColor.Prepend('#');
+			}
+			try
+			{
+				return ColorTranslator.FromHtml(hexColor);
+			}
+			catch
+			{
+				return fallback ?? Color.Empty;
+			}
+		}
+
 		/// <summary>
 		/// Creates a darkmode-compatible Cyotek Color Picker.
 		/// </summary>

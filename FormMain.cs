@@ -98,6 +98,12 @@ namespace QRGen
 
 				eccComboBox.SelectedIndex = appSettingsData.PreviousInputs.TryGetValue("eccComboBoxSelectedIndex", out string eccComboBoxSelectedIndexString) ? (int.TryParse(eccComboBoxSelectedIndexString, out int eccComboBoxSelectedIndex) ? eccComboBoxSelectedIndex : 0) : 0;
 
+				currRequest.backgroundColor = appSettingsData.PreviousInputs.TryGetValue("qrBackgroundColor", out string currRequestBackgroundColorString) ? Util.HexToColor(currRequestBackgroundColorString, Color.White) : Color.White;
+				backgroundColorPreview.BackColor = currRequest.backgroundColor;
+
+				currRequest.foregroundColor = appSettingsData.PreviousInputs.TryGetValue("qrForegroundColor", out string currRequestForegroundColorString) ? Util.HexToColor(currRequestForegroundColorString, Color.Black) : Color.Black;
+				foregroundColorPreview.BackColor = currRequest.foregroundColor;
+
 				DecodeImageFilePath = appSettingsData.PreviousInputs.TryGetValue("decodeImageFilePath", out string decodeImageFilePath) ? decodeImageFilePath : "";
 			}
 			#endregion
@@ -128,6 +134,10 @@ namespace QRGen
 				appSettingsData.PreviousInputs["encodeTextBoxText"] = encodeTextBox.Text;
 
 				appSettingsData.PreviousInputs["eccComboBoxSelectedIndex"] = eccComboBox.SelectedIndex.ToString();
+
+				appSettingsData.PreviousInputs["qrBackgroundColor"] = Util.ColorToHex(currRequest.backgroundColor, true);
+
+				appSettingsData.PreviousInputs["qrForegroundColor"] = Util.ColorToHex(currRequest.foregroundColor, true);
 
 				appSettingsData.PreviousInputs["decodeImageFilePath"] = DecodeImageFilePath;
 
