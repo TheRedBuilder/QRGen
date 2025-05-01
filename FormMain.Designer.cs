@@ -63,6 +63,8 @@
 			menuStrip1 = new MenuStrip();
 			fileToolStripMenuItem = new ToolStripMenuItem();
 			checkConnectionToolStripMenuItem = new ToolStripMenuItem();
+			toolStripSeparator4 = new ToolStripSeparator();
+			resetInputsToolStripMenuItem = new ToolStripMenuItem();
 			toolStripSeparator3 = new ToolStripSeparator();
 			exitToolStripMenuItem = new ToolStripMenuItem();
 			settingsToolStripMenuItem = new ToolStripMenuItem();
@@ -454,7 +456,7 @@
 			// 
 			// fileToolStripMenuItem
 			// 
-			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkConnectionToolStripMenuItem, toolStripSeparator3, exitToolStripMenuItem });
+			fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkConnectionToolStripMenuItem, toolStripSeparator4, resetInputsToolStripMenuItem, toolStripSeparator3, exitToolStripMenuItem });
 			fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			fileToolStripMenuItem.Size = new Size(65, 20);
 			fileToolStripMenuItem.Text = "Program";
@@ -467,6 +469,18 @@
 			checkConnectionToolStripMenuItem.Size = new Size(191, 22);
 			checkConnectionToolStripMenuItem.Text = "Check Connection";
 			checkConnectionToolStripMenuItem.Click += checkConnectionToolStripMenuItem_Click;
+			// 
+			// toolStripSeparator4
+			// 
+			toolStripSeparator4.Name = "toolStripSeparator4";
+			toolStripSeparator4.Size = new Size(188, 6);
+			// 
+			// resetInputsToolStripMenuItem
+			// 
+			resetInputsToolStripMenuItem.Name = "resetInputsToolStripMenuItem";
+			resetInputsToolStripMenuItem.Size = new Size(191, 22);
+			resetInputsToolStripMenuItem.Text = "Reset Inputs";
+			resetInputsToolStripMenuItem.Click += resetInputsToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator3
 			// 
@@ -528,7 +542,7 @@
 			// 
 			saveInputToolStripMenuItem.Name = "saveInputToolStripMenuItem";
 			saveInputToolStripMenuItem.Size = new Size(178, 22);
-			saveInputToolStripMenuItem.Text = "Save Input";
+			saveInputToolStripMenuItem.Text = "Save && Load Input";
 			saveInputToolStripMenuItem.Click += saveInputToolStripMenuItem_Click;
 			// 
 			// toolStripSeparator1
@@ -640,5 +654,7 @@
 		private ToolStripMenuItem checkConnectionToolStripMenuItem;
 		private ToolStripSeparator toolStripSeparator3;
 		private Label label8;
+		private ToolStripSeparator toolStripSeparator4;
+		private ToolStripMenuItem resetInputsToolStripMenuItem;
 	}
 }

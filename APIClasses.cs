@@ -195,7 +195,8 @@ namespace QRGen
 
 				if (!string.IsNullOrEmpty(symbol.Error))
 				{
-					sb.AppendLine($"QR {i + 1}: ERROR - {symbol.Error}");
+					sb.AppendLine($"QR {i + 1}:");
+					sb.AppendLine($"ERROR - {symbol.Error}");
 				}
 				else
 				{

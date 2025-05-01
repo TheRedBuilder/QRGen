@@ -1,6 +1,4 @@
 using Cyotek.Windows.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using static QRGen.Program;
@@ -116,16 +114,6 @@ namespace QRGen
 			#endregion
 		}
 
-		private async Task CheckConnection()
-		{
-			bool connected = await ApiUtil.CheckUrlAsync("https://goqr.me");
-			appStateLabel.Text = "Status: " + (connected ? "Ready" : "Service unavailable");
-			if (!connected)
-			{
-				MessageBox.Show("Connection failed! This app will not work correctly, check your internet connection and try again.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
-
 		private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			#region Save Input
@@ -143,18 +131,32 @@ namespace QRGen
 		}
 
 		#region Top Bar
-		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Application.Exit();
-		}
 
+			#region Program Tab
 		private async void checkConnectionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			appStateLabel.Text = "Status: Unknown";
 			await CheckConnection();
 		}
 
-		#region Settings Tab
+		private void resetInputsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Are you sure you want to clear out ALL your inputs? This cannot be undone!", "Input Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+			{
+				//Recreate requests
+				currRequest = new();
+				currReadRequest = new();
+				UpdateInputs(true);
+			}
+		}
+
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
+		}
+		#endregion
+
+			#region Settings Tab
 		ToolStripMenuItem[] themeStripMenuItems;
 		private void themeToolStripMenuItem_Click(object senderAny, EventArgs e)
 		{
@@ -201,6 +203,7 @@ namespace QRGen
 			appSettings.Save();
 		}
 		#endregion
+
 		#endregion
 
 		#region "Create" Body
@@ -259,6 +262,7 @@ namespace QRGen
 		}
 		#endregion
 
+		#region Drag & Drop
 		private void FormMain_DragDrop(object sender, DragEventArgs e)
 		{
 			if (e.Data == null)
@@ -314,7 +318,9 @@ namespace QRGen
 		{
 			e.Effect = DragDropEffects.Copy;
 		}
+		#endregion
 
+		#region Image Pasting
 		private void FormMain_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (mainTabControl.SelectedIndex == 1 && e.Control && e.KeyCode == Keys.V)
@@ -329,6 +335,36 @@ namespace QRGen
 					decodeButton.Enabled = true;
 				}
 			}
+		}
+		#endregion
+
+		/// <summary>
+		/// Checks connection to goqr.me and updates the gui.
+		/// </summary>
+		private async Task CheckConnection()
+		{
+			bool connected = await ApiUtil.CheckUrlAsync("https://goqr.me");
+			appStateLabel.Text = "Status: " + (connected ? "Ready" : "Service unavailable");
+			if (!connected)
+			{
+				MessageBox.Show("Connection failed! This app will not work correctly, check your internet connection and try again.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		/// <summary>
+		/// Syncs the input in the gui with the current request.
+		/// </summary>
+		/// <param name="isReset">If DecodeImageFilePath should be reset.</param>
+		private void UpdateInputs(bool isReset = false)
+		{
+			encodeTextBox.Text = currRequest.data;
+			eccComboBox.SelectedIndex = (int)(currRequest.ecc ?? ECCLevel.L);
+			backgroundColorPreview.BackColor = currRequest.backgroundColor;
+			foregroundColorPreview.BackColor = currRequest.foregroundColor;
+			if (isReset)
+			{
+				DecodeImageFilePath = "";
+			};
 		}
 	}
 }
