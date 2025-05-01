@@ -48,6 +48,7 @@ namespace QRGen
 					catch (Exception)
 					{
 						selectedFileLabel.Text = "Current File:";
+						previewPictureBox.Image = new Bitmap(1, 1);
 						decodeButton.Enabled = false;
 					}
 				}
@@ -55,6 +56,7 @@ namespace QRGen
 				{
 					_decodeImageFilePath = "";
 					selectedFileLabel.Text = "Current File:";
+					previewPictureBox.Image = new Bitmap(1, 1);
 					decodeButton.Enabled = false;
 				}
 			}
